@@ -1,0 +1,1 @@
+URL_BACKEND = 'https://testview-281820.nn.r.appspot.com/api'
