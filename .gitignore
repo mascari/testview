@@ -1,0 +1,3 @@
+*.cfg
+backend/.vscode/settings.json
+backend/env/pyvenv.cfg
