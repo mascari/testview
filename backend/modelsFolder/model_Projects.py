@@ -1,7 +1,7 @@
-from config import MongoDBConnect
-from modelsFolder.model_Settings import ModelSettings
-from modelsFolder.model_Repositories import Repositories
-from modelsFolder.model_SettingsFiles import ModelSettingsFiles
+from backend.config import MongoDBConnect
+from backend.modelsFolder.model_Settings import ModelSettings
+from backend.modelsFolder.model_Repositories import Repositories
+from backend.modelsFolder.model_SettingsFiles import ModelSettingsFiles
 import pymongo
 
 

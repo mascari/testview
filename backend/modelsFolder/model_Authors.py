@@ -1,4 +1,4 @@
-from config import MongoDBConnect
+from backend.config import MongoDBConnect
 import pymongo
 
 client = pymongo.MongoClient(MongoDBConnect)

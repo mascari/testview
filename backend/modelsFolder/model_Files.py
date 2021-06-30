@@ -1,5 +1,5 @@
-from config import MongoDBConnect
-from modelsFolder.model_SettingsFiles import ModelSettingsFiles
+from backend.config import MongoDBConnect
+from backend.modelsFolder.model_SettingsFiles import ModelSettingsFiles
 import pymongo
 
 
