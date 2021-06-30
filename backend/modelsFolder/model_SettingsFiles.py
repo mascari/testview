@@ -1,6 +1,6 @@
 from flask import Flask
 from config import MongoDBConnect
-from pydriller import RepositoryMining
+from pydriller import Repository
 import datetime
 import pymongo
 from config import MongoDBConnect
