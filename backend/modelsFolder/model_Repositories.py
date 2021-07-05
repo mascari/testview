@@ -1,10 +1,10 @@
-from backend.config import MongoDBConnect
-from backend.modelsFolder.model_Commits import Commits
-from backend.modelsFolder.model_Files import Files
-from backend.modelsFolder.model_Features import Features
-from backend.modelsFolder.model_Associations import Associations
-from backend.modelsFolder.model_Authors import Authors
-from backend.modelsFolder.model_Reports import Reports
+from config import MongoDBConnect
+from modelsFolder.model_Commits import Commits
+from modelsFolder.model_Files import Files
+from modelsFolder.model_Features import Features
+from modelsFolder.model_Associations import Associations
+from modelsFolder.model_Authors import Authors
+from modelsFolder.model_Reports import Reports
 import pymongo
 
 

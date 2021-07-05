@@ -1,9 +1,9 @@
-from backend.config import MongoDBConnect
-from pydriller import Repository
+from config import MongoDBConnect
+from pydriller import RepositoryMining
 import datetime
-from backend.modelsFolder.model_Settings import ModelSettings
-from backend.modelsFolder.model_Files import Files
-from backend.modelsFolder.model_Authors import Authors
+from modelsFolder.model_Settings import ModelSettings
+from modelsFolder.model_Files import Files
+from modelsFolder.model_Authors import Authors
 from backend.modelsFolder.model_SettingsFiles import ModelSettingsFiles
 import pymongo
 
