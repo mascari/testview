@@ -1,10 +1,10 @@
 from config import MongoDBConnect
-from pydriller import RepositoryMining
+from pydriller import Repository
 import datetime
 from modelsFolder.model_Settings import ModelSettings
 from modelsFolder.model_Files import Files
 from modelsFolder.model_Authors import Authors
-from backend.modelsFolder.model_SettingsFiles import ModelSettingsFiles
+from modelsFolder.model_SettingsFiles import ModelSettingsFiles
 import pymongo
 
 
@@ -36,55 +36,55 @@ class Commits():
 
         days_retrieval = ModelSettings.get_days_retrieval(project_name)
 
-        date = datetime.datetime.today() - datetime.timedelta(days=days_retrieval) 
+        date = datetime.datetime.today() - datetime.timedelta(days=days_retrieval)
 
-        for commit in RepositoryMining(url, since=date).traverse_commits():
+        for commit in Repository(url, since=date).traverse_commits():
             _hash = commit.hash
             author = commit.author.name
             date = commit.author_date
-            number_files = len(commit.modifications)
+            number_files = len(commit.modified_files)
             message = commit.msg
 
             number_lines = 0
             # Iterate the files of the commit
-            for mod in commit.modifications:
-                
+            for mod in commit.modified_files:
+
                 file_extensions = ModelSettingsFiles.get_file_extensions(project_name)
 
                 for e in file_extensions:
                         if mod.filename.endswith(e):
                             if mod.new_path != '_None_':
                                 # Add a new line linking the file with the commit
-                                mycol_commit.insert_one({ "file_name": mod.filename, "file_path": mod.new_path, "hash": _hash, "number_lines": mod.added + mod.removed })
-                
+                                mycol_commit.insert_one({ "file_name": mod.filename, "file_path": mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.removed })
+
                 # The number of files modifieds in this commit
                 number_lines = number_lines + mod.added + mod.removed
 
                 # Create the file in the table File (if already exists, the Files.new_file treats)
-                Files.new_file( 
+                Files.new_file(
                     project_name = project_name,
-                    repository_name = repository_name, 
-                    file_name = mod.filename, 
+                    repository_name = repository_name,
+                    file_name = mod.filename,
                     file_path = mod.new_path,
                     last_modification = date
                 )
 
             # Create the file in the table File (if already exists, the Files.new_file treats)
-            Authors.new_author( 
-                project_name = project_name, 
+            Authors.new_author(
+                project_name = project_name,
                 repository_name = repository_name,
-                author_name = author, 
+                author_name = author,
                 number_lines = number_lines,
                 last_modification = date
                 )
 
             mydict = { "hash": _hash, "message": message, "author": author, "date": date, "number_files": number_files, "number_lines": number_lines}
             x = mycol.insert_one(mydict)
-            
+
     def update_commits(project_name, repository_name):
         print("Commits.update_commits(" + project_name+ ", " + repository_name + ")")
-        
-        
+
+
         try:
             from modelsFolder.model_Repositories import Repositories
         except ImportError:
@@ -99,13 +99,13 @@ class Commits():
 
         days_retrieval = ModelSettings.get_days_retrieval(project_name)
 
-        date = datetime.datetime.today() - datetime.timedelta(days=days_retrieval) 
+        date = datetime.datetime.today() - datetime.timedelta(days=days_retrieval)
 
-        for commit in RepositoryMining(url, since=date).traverse_commits():
+        for commit in Repository(url, since=date).traverse_commits():
             _hash = commit.hash
             author = commit.author.name
             date = commit.author_date
-            number_files = len(commit.modifications)
+            number_files = len(commit.modified_files)
             message = commit.msg
             number_lines = 0
 
@@ -113,37 +113,37 @@ class Commits():
             if not result.count():
                 # Insert a new line in the commits table (with the info of the commit)
                 mycol.insert_one({ "hash": _hash, "message": message, "author": author, "date": date, "number_files": number_files, "number_lines": number_lines })
-                
-                # Iterate the files of the commit
-                for mod in commit.modifications:
 
-            
+                # Iterate the files of the commit
+                for mod in commit.modified_files:
+
+
                     file_extensions = ModelSettingsFiles.get_file_extensions(project_name)
 
                     for e in file_extensions:
                             if mod.filename.endswith(e):
                                 if mod.new_path != '_None_':
                                     # Add a new line linking the file with the commit
-                                    mycol_commit.insert_one({ "file_name": mod.filename, "file_path" : mod.new_path, "hash": _hash, "number_lines": mod.added + mod.removed })
-            
+                                    mycol_commit.insert_one({ "file_name": mod.filename, "file_path" : mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.deleted_lines })
 
-                    
+
+
                     # The number of files modifieds in this commit
-                    number_lines = number_lines + mod.added + mod.removed
+                    number_lines = number_lines + mod.added_lines + mod.deleted_lines
                     # Create the file in the table File (if already exists, the Files.new_file treats)
-                    Files.new_file( 
+                    Files.new_file(
                         project_name = project_name,
-                        repository_name = repository_name, 
-                        file_name = mod.filename, 
+                        repository_name = repository_name,
+                        file_name = mod.filename,
                         file_path = mod.new_path,
                         last_modification = date
                     )
 
                 # Create the Author in the table author (if already exists, the Authors.new_author treats)
-                Authors.new_author( 
-                    project_name = project_name, 
+                Authors.new_author(
+                    project_name = project_name,
                     repository_name = repository_name,
-                    author_name = author, 
+                    author_name = author,
                     number_lines = number_lines,
                     last_modification = date
                     )
@@ -160,7 +160,7 @@ class Commits():
         myresult = []
 
         for x in result:
-            myresult.append(x)            
+            myresult.append(x)
 
         return myresult
 
@@ -175,8 +175,8 @@ class Commits():
         myresult = []
 
         for x in result:
-            myresult.append(x)      
- 
+            myresult.append(x)
+
 
         return myresult
 
