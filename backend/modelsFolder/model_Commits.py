@@ -55,10 +55,10 @@ class Commits():
                         if mod.filename.endswith(e):
                             if mod.new_path != '_None_':
                                 # Add a new line linking the file with the commit
-                                mycol_commit.insert_one({ "file_name": mod.filename, "file_path": mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.removed })
+                                mycol_commit.insert_one({ "file_name": mod.filename, "file_path": mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.deleted_lines })
 
                 # The number of files modifieds in this commit
-                number_lines = number_lines + mod.added + mod.removed
+                number_lines = number_lines + mod.added_lines + mod.deleted_lines
 
                 # Create the file in the table File (if already exists, the Files.new_file treats)
                 Files.new_file(
@@ -66,7 +66,7 @@ class Commits():
                     repository_name = repository_name,
                     file_name = mod.filename,
                     file_path = mod.new_path,
-                    last_modification = date
+                    last_modification = date,
                 )
 
             # Create the file in the table File (if already exists, the Files.new_file treats)
@@ -75,10 +75,10 @@ class Commits():
                 repository_name = repository_name,
                 author_name = author,
                 number_lines = number_lines,
-                last_modification = date
+                last_modification = date,
                 )
 
-            mydict = { "hash": _hash, "message": message, "author": author, "date": date, "number_files": number_files, "number_lines": number_lines}
+            mydict = { "hash": _hash, "message": message, "author": author, "date": date, "number_files": number_files, "number_lines": number_lines }
             x = mycol.insert_one(mydict)
 
     def update_commits(project_name, repository_name):
