@@ -44,6 +44,10 @@ class Commits():
             date = commit.author_date
             number_files = len(commit.modified_files)
             message = commit.msg
+            dmm_unit_size = commit.dmm_unit_size
+            dmm_unit_complexity = commit.dmm_unit_complexity
+            dmm_unit_interfacing = commit.dmm_unit_interfacing
+
 
             number_lines = 0
             # Iterate the files of the commit
@@ -55,19 +59,19 @@ class Commits():
                         if mod.filename.endswith(e):
                             if mod.new_path != '_None_':
                                 # Add a new line linking the file with the commit
-                                mycol_commit.insert_one({ "file_name": mod.filename, "file_path": mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.deleted_lines })
+                                mycol_commit.insert_one({ "file_name": mod.filename, "file_path": mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.deleted_lines, "dmm_unit_size": dmm_unit_size, "dmm_unit_complexity": dmm_unit_complexity, "dmm_unit_interfacing": dmm_unit_interfacing })
 
-                # The number of files modifieds in this commit
-                number_lines = number_lines + mod.added_lines + mod.deleted_lines
+                            # The number of files modifieds in this commit
+                            number_lines = number_lines + mod.added_lines + mod.deleted_lines
 
-                # Create the file in the table File (if already exists, the Files.new_file treats)
-                Files.new_file(
-                    project_name = project_name,
-                    repository_name = repository_name,
-                    file_name = mod.filename,
-                    file_path = mod.new_path,
-                    last_modification = date,
-                )
+                            # Create the file in the table File (if already exists, the Files.new_file treats)
+                            Files.new_file(
+                                project_name = project_name,
+                                repository_name = repository_name,
+                                file_name = mod.filename,
+                                file_path = mod.new_path,
+                                last_modification = date,
+                            )
 
             # Create the file in the table File (if already exists, the Files.new_file treats)
             Authors.new_author(
@@ -108,11 +112,14 @@ class Commits():
             number_files = len(commit.modified_files)
             message = commit.msg
             number_lines = 0
+            dmm_unit_complexity = commit.dmm_unit_complexity
+            dmm_unit_size = commit.dmm_unit_size
+            dmm_unit_interfacing = commit.dmm_unit_interfacing
 
             result = mycol.find({"hash" : _hash})
             if not result.count():
                 # Insert a new line in the commits table (with the info of the commit)
-                mycol.insert_one({ "hash": _hash, "message": message, "author": author, "date": date, "number_files": number_files, "number_lines": number_lines })
+                mycol.insert_one({ "hash": _hash, "message": message, "author": author, "date": date, "number_files": number_files, "number_lines": number_lines, "dmm_unit_complexity": dmm_unit_complexity, "dmm_unit_size": dmm_unit_size, "dmm_unit_interfacing": dmm_unit_interfacing })
 
                 # Iterate the files of the commit
                 for mod in commit.modified_files:
@@ -124,7 +131,7 @@ class Commits():
                             if mod.filename.endswith(e):
                                 if mod.new_path != '_None_':
                                     # Add a new line linking the file with the commit
-                                    mycol_commit.insert_one({ "file_name": mod.filename, "file_path" : mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.deleted_lines })
+                                    mycol_commit.insert_one({ "file_name": mod.filename, "file_path" : mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.deleted_lines, "cyclomatic_complexity": mod.complexity, "dmm_unit_complexity": dmm_unit_complexity, "dmm_unit_size": dmm_unit_size, "dmm_unit_interfacing": dmm_unit_interfacing})
 
 
 
@@ -136,7 +143,7 @@ class Commits():
                         repository_name = repository_name,
                         file_name = mod.filename,
                         file_path = mod.new_path,
-                        last_modification = date
+                        last_modification = date,
                     )
 
                 # Create the Author in the table author (if already exists, the Authors.new_author treats)
