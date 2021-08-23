@@ -18,14 +18,14 @@ class Files():
         file_extensions = ModelSettingsFiles.get_file_extensions(project_name)
 
         for e in file_extensions:
-            if file_name.endswith(e):
-                if file_path != '_None_':
+             if file_name.endswith(e):
+                 if file_path != '_None_':
 
-                    result = mycol.find({"file_path" : file_path})
-                    if not result.count():
-                        x = mycol.insert_one({ "file_path": file_path, "file_name": file_name, "number_features_associated" : number_features_associated, "last_modification": last_modification })
-                    else:
-                        Files.update_file_last_modification(project_name, repository_name, file_path, last_modification)
+                     result = mycol.find({"file_path" : file_path})
+                     if not result.count():
+                         x = mycol.insert_one({ "file_path": file_path, "file_name": file_name, "number_features_associated" : number_features_associated, "last_modification": last_modification })
+                     else:
+                         Files.update_file_last_modification(project_name, repository_name, file_path, last_modification)
 
         if file_path != '_None_':
             result = mycol.find({"file_path" : file_path})
