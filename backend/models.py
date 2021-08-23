@@ -3,7 +3,7 @@ from pydriller import RepositoryMining
 import datetime
 from modelsFolder.model_Settings import ModelSettings
 from modelsFolder.model_Projects import Projects
-from modelsFolder.model_Repository import Repositories
+from modelsFolder.model_Repositories import Repositories
 from modelsFolder.model_Commits import Commits
 from modelsFolder.model_Files import Files
 from modelsFolder.model_Features import Features
