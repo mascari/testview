@@ -15,13 +15,12 @@ class ModelSettingsFiles():
         mydb = client[project_name]
         mycol = mydb['settings']
         mycol.insert({'file_extensions' : '.py'})
-        mycol.insert({'file_extensions' : '.java'})
-        mycol.insert({'file_extensions' : '.c'})
-        mycol.insert({'file_extensions' : '.h'})
-        mycol.insert({'file_extensions' : '.cpp'})
-        mycol.insert({'file_extensions' : '.html'})
-        mycol.insert({'file_extensions' : '.js'})
-        mycol.insert({'file_extensions' : '.css'})
+        #mycol.insert({'file_extensions' : '.java'})
+        #mycol.insert({'file_extensions' : '.h'})
+        #mycol.insert({'file_extensions' : '.cpp'})
+        #mycol.insert({'file_extensions' : '.html'})
+        #mycol.insert({'file_extensions' : '.js'})
+        #mycol.insert({'file_extensions' : '.css'})
 
     def new_file_extensions(project_name, file_extensions):
         print("ModelSettingsFiles.edit_file_extensions("+project_name+", "+file_extensions + ")")
