@@ -30,7 +30,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
   String repositoryName;
   bool sort = true;
   bool _ascending = false;
-  int _column = 5;
+  int _column = 6;
   List<ReportsObject> reports;
   List<ReportsObject> selectedReports;
   List<Widget> listView;
@@ -127,6 +127,42 @@ class _ReportsWidgetState extends State<ReportsWidget> {
             }
             if (_column == 5) {
               if (_ascending) {
+                listReports.sort((a, b) =>
+                    a.averageCyclomaticComplexity.compareTo(b.averageCyclomaticComplexity));
+              } else {
+                listReports.sort((a, b) =>
+                    b.averageCyclomaticComplexity.compareTo(a.averageCyclomaticComplexity));
+              }
+            }
+            if (_column == 6) {
+              if (_ascending) {
+                listReports.sort((a, b) =>
+                    a.averageDmmUnitComplexity.compareTo(b.averageDmmUnitComplexity));
+              } else {
+                listReports.sort((a, b) =>
+                    b.averageDmmUnitComplexity.compareTo(a.averageDmmUnitComplexity));
+              }
+            }
+            if (_column == 7) {
+              if (_ascending) {
+                listReports.sort((a, b) =>
+                    a.averageDmmUnitInterfacing.compareTo(b.averageDmmUnitInterfacing));
+              } else {
+                listReports.sort((a, b) =>
+                    b.averageDmmUnitInterfacing.compareTo(a.averageDmmUnitInterfacing));
+              }
+            }
+            if (_column == 8) {
+              if (_ascending) {
+                listReports.sort((a, b) =>
+                    a.averageDmmUnitSize.compareTo(b.averageDmmUnitSize));
+              } else {
+                listReports.sort((a, b) =>
+                    b.averageDmmUnitSize.compareTo(a.averageDmmUnitSize));
+              }
+            }
+            if (_column == 9) {
+              if (_ascending) {
                 listReports
                     .sort((a, b) => a.priorization.compareTo(b.priorization));
               } else {
@@ -145,6 +181,10 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                 DataCell(Text(listReports[i].numberBugs)),
                 DataCell(Text(listReports[i].numberFilesAssociated)),
                 DataCell(Text(listReports[i].numberFilesModified)),
+                DataCell(Text(listReports[i].averageCyclomaticComplexity)),
+                DataCell(Text(listReports[i].averageDmmUnitComplexity)),
+                DataCell(Text(listReports[i].averageDmmUnitInterfacing)),
+                DataCell(Text(listReports[i].averageDmmUnitSize)),
                 DataCell(Text("${listReports[i].priorization}")),
               ]);
               dataRows[i] = data;
@@ -260,12 +300,52 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Priorization'),
+                              label: Text('Average Cyclomatic Complexity'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
                                   _ascending = ascending;
                                   _column = 5;
+                                });
+                              },
+                            ),
+                            DataColumn(
+                              label: Text('Average Dmm Unit Complexity'),
+                              onSort: (columnIndex, ascending) {
+                                setState(() {
+                                  sort = !sort;
+                                  _ascending = ascending;
+                                  _column = 6;
+                                });
+                              },
+                            ),
+                            DataColumn(
+                              label: Text('Average Dmm Unit Interfacing'),
+                              onSort: (columnIndex, ascending) {
+                                setState(() {
+                                  sort = !sort;
+                                  _ascending = ascending;
+                                  _column = 7;
+                                });
+                              },
+                            ),
+                            DataColumn(
+                              label: Text('Average Dmm Unit Size'),
+                              onSort: (columnIndex, ascending) {
+                                setState(() {
+                                  sort = !sort;
+                                  _ascending = ascending;
+                                  _column = 8;
+                                });
+                              },
+                            ),
+                            DataColumn(
+                              label: Text('Priorization'),
+                              onSort: (columnIndex, ascending) {
+                                setState(() {
+                                  sort = !sort;
+                                  _ascending = ascending;
+                                  _column = 9;
                                 });
                               },
                             ),
