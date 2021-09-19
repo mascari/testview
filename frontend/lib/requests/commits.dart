@@ -16,32 +16,38 @@ class Commits {
 class CommitsObject {
   String author = '';
   String date = '';
+  String dmmUnitComplexity = ' ';
+  String dmmUnitInterfacing = ' ';
+  String dmmUnitSize = ' ';
   String message = '';
   int numberFiles = 0;
+  
+
   CommitsObject(
-      {Key key, this.author, this.date, this.message, this.numberFiles});
+      {Key key, this.author, this.date, this.message, this.numberFiles, this.dmmUnitComplexity, this.dmmUnitInterfacing, this.dmmUnitSize});
 }
 
 List<CommitsObject> snapToDataCommits(var data) {
   var dataSplit = data.split(',\n');
   int size;
   int sizeList;
+  print(dataSplit);
 
-  if (dataSplit.length > 7 * rowsPerTable) {
-    size = 7 * rowsPerTable;
+  if (dataSplit.length > 10 * rowsPerTable) {
+    size = 10 * rowsPerTable;
     sizeList = rowsPerTable;
-  } else if (dataSplit.length < 7) {
+  } else if (dataSplit.length < 10) {
     size = 0;
     sizeList = 0;
   } else {
     size = dataSplit.length;
-    sizeList = size ~/ 7;
+    sizeList = size ~/ 10;
   }
 
   List<CommitsObject> listCommits = new List<CommitsObject>(sizeList);
 
-  for (int i = 0; i < size; i = i + 7) {
-    int j = (i ~/ 7);
+  for (int i = 0; i < size; i = i + 10) {
+    int j = (i ~/ 10);
 
     //Add the author to the list of commits
     var dataSplitOne = dataSplit[i + 1].split(':');
@@ -55,13 +61,28 @@ List<CommitsObject> snapToDataCommits(var data) {
     var dataSplitThree = dataSplitTwo[1].split(' ');
     listCommits[j].date = dataSplitThree[0];
 
+    //Add the dmmUnitComplexity to the list of commits
+    // dataSplitOne = dataSplit[i + 3].split(':');
+    // dataSplitTwo = dataSplitOne[1].split('"');
+    // listCommits[j].message = dataSplitTwo[1];
+
+    // //Add the dmmUnitInterfacing to the list of commits
+    // dataSplitOne = dataSplit[i + 4].split(':');
+    // dataSplitTwo = dataSplitOne[1].split('"');
+    // listCommits[j].message = dataSplitTwo[1];
+
+    // //Add the dmmUnitSize to the list of commits
+    // dataSplitOne = dataSplit[i + 5].split(':');
+    // dataSplitTwo = dataSplitOne[1].split('"');
+    // listCommits[j].message = dataSplitTwo[1];
+
     //Add the message to the list of commits
-    dataSplitOne = dataSplit[i + 4].split(':');
+    dataSplitOne = dataSplit[i + 7].split(':');
     dataSplitTwo = dataSplitOne[1].split('"');
     listCommits[j].message = dataSplitTwo[1];
 
     //Add the numberFiles to the list of commits
-    dataSplitOne = dataSplit[i + 5].split('":');
+    dataSplitOne = dataSplit[i + 8].split('":');
     listCommits[j].numberFiles = int.parse(dataSplitOne[1]);
   }
 
