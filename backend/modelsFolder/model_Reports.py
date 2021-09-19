@@ -53,11 +53,14 @@ class Reports():
         author_percent_dict = {}        # This dict is to save the percent of commits that the author make compare to the total_commits
         total_commits = 0               # This int is to save the total number of commits
 
+
         commits = Commits.get_commits(project_name, repository_name)
 
         # Get the files modified in the range and see if was or not associated
         files_not_associated = []
         files_associated = []
+
+        files_object_associated = []
 
         for c in commits:
             # print(str(c['date'])[0:9])
@@ -72,8 +75,11 @@ class Reports():
                     obj_file = Files.get_files(project_name, repository_name, file_path=f['file_path'])
                     if obj_file[0]['number_features_associated'] > 0:
                         files_associated.append(f['file_path'])
+                        files_object_associated.append(f)
                     else:
                         files_not_associated.append(f['file_path'])
+        
+
 
         authors = Authors.get_authors(project_name, repository_name)
 
@@ -94,12 +100,22 @@ class Reports():
 
         # Get the features of associated files
         features_modified = {}
-        for file_associated in files_associated:
-            associations = Associations.get_associations(project_name = project_name, repository_name= repository_name, file_path= file_associated)
+        features_complexity = {}
+        features_average_complexity = {}
+        for file_object_associated in files_object_associated:
+            associations = Associations.get_associations(project_name = project_name, repository_name= repository_name, file_path= file_object_associated['file_path'])
             for a in associations:
                 features_modified[a['feature_name']] = features_modified.get(a['feature_name'], 0) + 1
+                if file_object_associated['dmm_unit_complexity'] is not None:
+                    features_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['dmm_unit_complexity']
+                else:
+                    features_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+
                     
         print('Features modified: ' + str(features_modified))
+
+        for key, value in features_complexity.items():
+            features_average_complexity[key] = value/features_modified[key] if features_modified[key] else 0
 
 
         # Init the Metric: 
@@ -109,17 +125,17 @@ class Reports():
 
         for f in features:
             if f['feature_name'] in features_modified:
-                features_prio[f['feature_name']] = f['number_bugs'] * 2 + f['number_files_associated'] * 1 +  features_modified[f['feature_name']] * 4
+                features_prio[f['feature_name']] = f['number_bugs'] * 2 + f['number_files_associated'] * 1 +  features_modified[f['feature_name']] * 4 + features_average_complexity[f['feature_name']] * 2
             else:
                 features_prio[f['feature_name']] = f['number_bugs'] * 2 + f['number_files_associated'] * 1
         
         print(features_prio)
         for f in features:
             if f['feature_name'] in features_modified:
-                mydict = { "feature_name": f['feature_name'], "prio": features_prio[f['feature_name']], "date": date, "number_files_associated": f['number_files_associated'], "number_bugs" : f['number_bugs'], "number_files_modified": features_modified[f['feature_name']]}
+                mydict = { "feature_name": f['feature_name'], "prio": features_prio[f['feature_name']], "date": date, "number_files_associated": f['number_files_associated'], "number_bugs" : f['number_bugs'], "number_files_modified": features_modified[f['feature_name']], "average_complexity" : features_average_complexity[f['feature_name']]}
                 x = mycol.insert_one(mydict)
             else:
-                mydict = { "feature_name": f['feature_name'], "prio": features_prio[f['feature_name']], "date": date, "number_files_associated": f['number_files_associated'], "number_bugs" : f['number_bugs'], "number_files_modified": 0}
+                mydict = { "feature_name": f['feature_name'], "prio": features_prio[f['feature_name']], "date": date, "number_files_associated": f['number_files_associated'], "number_bugs" : f['number_bugs'], "number_files_modified": 0, "average_complexity" : 0}
                 x = mycol.insert_one(mydict)
 
 
