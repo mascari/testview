@@ -100,22 +100,53 @@ class Reports():
 
         # Get the features of associated files
         features_modified = {}
-        features_complexity = {}
-        features_average_complexity = {}
+        features_cyclomatic_complexity = {}
+        features_average_cyclomatic_complexity = {}
+        features_dmm_unit_complexity = {}
+        features_average_dmm_unit_complexity = {}
+        features_dmm_unit_size = {}
+        features_average_dmm_unit_size = {}
+        features_dmm_unit_interfacing = {}
+        features_average_dmm_unit_interfacing = {}
         for file_object_associated in files_object_associated:
             associations = Associations.get_associations(project_name = project_name, repository_name= repository_name, file_path= file_object_associated['file_path'])
             for a in associations:
                 features_modified[a['feature_name']] = features_modified.get(a['feature_name'], 0) + 1
-                if file_object_associated['dmm_unit_complexity'] is not None:
-                    features_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['dmm_unit_complexity']
+
+                if file_object_associated['cyclomatic_complexity'] is not None:
+                    features_cyclomatic_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['cyclomatic_complexity']
                 else:
-                    features_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+                    features_cyclomatic_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+
+                if file_object_associated['dmm_unit_complexity'] is not None:
+                    features_dmm_unit_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['dmm_unit_complexity']
+                else:
+                    features_dmm_unit_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+
+                if file_object_associated['dmm_unit_size'] is not None:
+                    features_dmm_unit_size[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['dmm_unit_size']
+                else:
+                    features_dmm_unit_size[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+
+                if file_object_associated['dmm_unit_interfacing'] is not None:
+                    features_dmm_unit_interfacing[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['dmm_unit_interfacing']
+                else:
+                    features_dmm_unit_interfacing[a['feature_name']] = features_modified.get(a['feature_name'], 0)
 
                     
         print('Features modified: ' + str(features_modified))
 
-        for key, value in features_complexity.items():
-            features_average_complexity[key] = value/features_modified[key] if features_modified[key] else 0
+        for key, value in features_cyclomatic_complexity.items():
+            features_average_cyclomatic_complexity[key] = value/features_modified[key] if features_modified[key] else 0
+
+        for key, value in features_dmm_unit_complexity.items():
+            features_average_dmm_unit_complexity[key] = value/features_modified[key] if features_modified[key] else 0
+
+        for key, value in features_dmm_unit_size.items():
+            features_average_dmm_unit_size[key] = value/features_modified[key] if features_modified[key] else 0
+
+        for key, value in features_dmm_unit_interfacing.items():
+            features_average_dmm_unit_interfacing[key] = value/features_modified[key] if features_modified[key] else 0
 
 
         # Init the Metric: 
@@ -125,14 +156,14 @@ class Reports():
 
         for f in features:
             if f['feature_name'] in features_modified:
-                features_prio[f['feature_name']] = f['number_bugs'] * 2 + f['number_files_associated'] * 1 +  features_modified[f['feature_name']] * 4 + features_average_complexity[f['feature_name']] * 2
+                features_prio[f['feature_name']] = f['number_bugs'] * 2 + f['number_files_associated'] * 1 +  features_modified[f['feature_name']] * 4 + features_average_cyclomatic_complexity[f['feature_name']] * 2 + features_average_dmm_unit_complexity[f['feature_name']] * 2 + features_average_dmm_unit_size[f['feature_name']] * 2 + features_dmm_unit_interfacing[f['feature_name']] * 2
             else:
                 features_prio[f['feature_name']] = f['number_bugs'] * 2 + f['number_files_associated'] * 1
         
         print(features_prio)
         for f in features:
             if f['feature_name'] in features_modified:
-                mydict = { "feature_name": f['feature_name'], "prio": features_prio[f['feature_name']], "date": date, "number_files_associated": f['number_files_associated'], "number_bugs" : f['number_bugs'], "number_files_modified": features_modified[f['feature_name']], "average_complexity" : features_average_complexity[f['feature_name']]}
+                mydict = { "feature_name": f['feature_name'], "prio": features_prio[f['feature_name']], "date": date, "number_files_associated": f['number_files_associated'], "number_bugs" : f['number_bugs'], "number_files_modified": features_modified[f['feature_name']], "average_cyclomatic_complexity" : features_average_cyclomatic_complexity[f['feature_name']], "average_dmm_unit_complexity" : features_average_dmm_unit_complexity[f['feature_name']], "average_dmm_unit_size" : features_average_dmm_unit_size[f['feature_name']], "average_dmm_unit_interfacing" : features_average_dmm_unit_interfacing[f['feature_name']]}
                 x = mycol.insert_one(mydict)
             else:
                 mydict = { "feature_name": f['feature_name'], "prio": features_prio[f['feature_name']], "date": date, "number_files_associated": f['number_files_associated'], "number_bugs" : f['number_bugs'], "number_files_modified": 0, "average_complexity" : 0}
