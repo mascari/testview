@@ -30,7 +30,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
   String repositoryName;
   bool sort = true;
   bool _ascending = false;
-  int _column = 5;
+  int _column = 6;
   List<ReportsObject> reports;
   List<ReportsObject> selectedReports;
   List<Widget> listView;
@@ -127,6 +127,15 @@ class _ReportsWidgetState extends State<ReportsWidget> {
             }
             if (_column == 5) {
               if (_ascending) {
+                listReports.sort((a, b) =>
+                    a.averageComplexity.compareTo(b.averageComplexity));
+              } else {
+                listReports.sort((a, b) =>
+                    b.averageComplexity.compareTo(a.averageComplexity));
+              }
+            }
+            if (_column == 6) {
+              if (_ascending) {
                 listReports
                     .sort((a, b) => a.priorization.compareTo(b.priorization));
               } else {
@@ -145,6 +154,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                 DataCell(Text(listReports[i].numberBugs)),
                 DataCell(Text(listReports[i].numberFilesAssociated)),
                 DataCell(Text(listReports[i].numberFilesModified)),
+                DataCell(Text(listReports[i].averageComplexity)),
                 DataCell(Text("${listReports[i].priorization}")),
               ]);
               dataRows[i] = data;
@@ -260,12 +270,22 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Priorization'),
+                              label: Text('Average Complexity'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
                                   _ascending = ascending;
                                   _column = 5;
+                                });
+                              },
+                            ),
+                            DataColumn(
+                              label: Text('Priorization'),
+                              onSort: (columnIndex, ascending) {
+                                setState(() {
+                                  sort = !sort;
+                                  _ascending = ascending;
+                                  _column = 6;
                                 });
                               },
                             ),

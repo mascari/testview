@@ -9,9 +9,11 @@ class ReportsObject {
   String numberBugs = ' ';
   String numberFilesAssociated = ' ';
   String numberFilesModified = ' ';
-  int priorization = 0;
+  String averageComplexity = ' ';
+  String priorization = ' ';
   ReportsObject(
       {Key key,
+      this.averageComplexity,
       this.date,
       this.featureName,
       this.numberBugs,
@@ -23,51 +25,51 @@ class ReportsObject {
 List<ReportsObject> snapToDataReport(var data) {
   final intRegex = RegExp(r'(\d+)', multiLine: true);
   var dataSplit = data.split(',');
-
+  print(dataSplit.length);
+  
   int size;
   int sizeList;
-  if (dataSplit.length > 7 * rowsPerTable) {
-    size = 7 * rowsPerTable;
+  if (dataSplit.length > 8 * rowsPerTable) {
+    size = 8 * rowsPerTable;
     sizeList = rowsPerTable;
-  } else if (dataSplit.length < 7) {
+  } else if (dataSplit.length < 8) {
     size = 0;
     sizeList = 0;
   } else {
     size = dataSplit.length;
-    sizeList = size ~/ 7;
+    sizeList = size ~/ 8;
   }
 
   List<ReportsObject> listReports = new List<ReportsObject>(sizeList);
 
-  for (int i = 0; i < size; i = i + 7) {
-    int j = (i ~/ 7);
-    var dataSplitOne = dataSplit[i + 1].split(':');
+  for (int i = 0; i < size; i = i + 8) {
+    int j = (i ~/ 8);
+    var dataSplitOne = dataSplit[i + 2].split(':');
 
     ReportsObject date =
         new ReportsObject(date: dataSplitOne[1].replaceAll('"', ''));
     listReports[j] = date;
 
-    dataSplitOne = dataSplit[i + 2].split(':');
-    listReports[j].featureName = dataSplitOne[1].replaceAll('"', '');
+    dataSplitOne = dataSplit[i + 1].split(':');
+    listReports[j].averageComplexity = dataSplitOne[1];
 
     dataSplitOne = dataSplit[i + 3].split(':');
-    listReports[j].numberBugs = dataSplitOne[1];
+    listReports[j].featureName = dataSplitOne[1].replaceAll('"', '');
 
     dataSplitOne = dataSplit[i + 4].split(':');
-    listReports[j].numberFilesAssociated = dataSplitOne[1];
+    listReports[j].numberBugs = dataSplitOne[1];
 
     dataSplitOne = dataSplit[i + 5].split(':');
-    listReports[j].numberFilesModified = dataSplitOne[1];
+    listReports[j].numberFilesAssociated = dataSplitOne[1];
 
     dataSplitOne = dataSplit[i + 6].split(':');
-    String prioNumber = intRegex
-        .allMatches(dataSplitOne[1])
-        .map((m) => m.group(0))
-        .toString()
-        .replaceAll("(", "")
-        .replaceAll(")", "");
-    int prioInt = int.parse(prioNumber);
-    listReports[j].priorization = prioInt;
+    listReports[j].numberFilesModified = dataSplitOne[1];
+
+    
+
+    dataSplitOne = dataSplit[i + 7].split(':');
+    String prioNumber = dataSplitOne[1].replaceAll("]", "").replaceAll("}","").replaceAll("\n", "");
+    listReports[j].priorization = prioNumber;
   }
   return listReports;
 }
