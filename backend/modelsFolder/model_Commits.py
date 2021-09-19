@@ -48,6 +48,8 @@ class Commits():
             dmm_unit_complexity = commit.dmm_unit_complexity
             dmm_unit_interfacing = commit.dmm_unit_interfacing
 
+            mycol.insert_one({ "hash": _hash, "message": message, "author": author, "date": date, "number_files": number_files, "number_lines": number_lines, "dmm_unit_complexity": dmm_unit_complexity, "dmm_unit_size": dmm_unit_size, "dmm_unit_interfacing": dmm_unit_interfacing })
+
 
             number_lines = 0
             # Iterate the files of the commit
@@ -59,7 +61,7 @@ class Commits():
                         if mod.filename.endswith(e):
                             if mod.new_path != '_None_':
                                 # Add a new line linking the file with the commit
-                                mycol_commit.insert_one({ "file_name": mod.filename, "file_path": mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.deleted_lines, "dmm_unit_size": dmm_unit_size, "dmm_unit_complexity": dmm_unit_complexity, "dmm_unit_interfacing": dmm_unit_interfacing })
+                                mycol_commit.insert_one({ "file_name": mod.filename, "file_path" : mod.new_path, "hash": _hash, "number_lines": mod.added_lines + mod.deleted_lines, "cyclomatic_complexity": mod.complexity, "dmm_unit_complexity": dmm_unit_complexity, "dmm_unit_size": dmm_unit_size, "dmm_unit_interfacing": dmm_unit_interfacing})
 
                             # The number of files modifieds in this commit
                             number_lines = number_lines + mod.added_lines + mod.deleted_lines
