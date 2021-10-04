@@ -67,7 +67,7 @@ class Reports():
             date_commit = int(str(c['date'])[0:10].replace('-', ''))    # Convert to int to compare
 
             if date_commit >= date_init:
-                author_dict[c['author']] = author_dict.get(c['author'], 0) + 1  # Count the number of commits 
+                author_dict[c['author']] = author_dict.get(c['author'], 0) + 1  # Count the number of commits
                 # Get the files modified in the commit
                 files = Commits.get_files_commit(project_name, repository_name, c['hash'])
                 for f in files:
@@ -78,7 +78,7 @@ class Reports():
                         files_object_associated.append(f)
                     else:
                         files_not_associated.append(f['file_path'])
-        
+
 
 
         authors = Authors.get_authors(project_name, repository_name)
@@ -87,7 +87,7 @@ class Reports():
             total_commits += a['number_commits']
             if a['author_name'] in author_dict:
                 author_total_dict[a['author_name']] = a['number_commits']
-                
+
         for a in author_total_dict:
             author_percent_dict[a] = author_total_dict[a] / total_commits
 
@@ -114,26 +114,18 @@ class Reports():
                 features_modified[a['feature_name']] = features_modified.get(a['feature_name'], 0) + 1
 
                 if file_object_associated['cyclomatic_complexity'] is not None:
-                    features_cyclomatic_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['cyclomatic_complexity']
-                else:
-                    features_cyclomatic_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+                    features_cyclomatic_complexity[a['feature_name']] =  file_object_associated['cyclomatic_complexity']
 
                 if file_object_associated['dmm_unit_complexity'] is not None:
-                    features_dmm_unit_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['dmm_unit_complexity']
-                else:
-                    features_dmm_unit_complexity[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+                    features_dmm_unit_complexity[a['feature_name']] = file_object_associated['dmm_unit_complexity']
 
                 if file_object_associated['dmm_unit_size'] is not None:
-                    features_dmm_unit_size[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['dmm_unit_size']
-                else:
-                    features_dmm_unit_size[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+                    features_dmm_unit_size[a['feature_name']] = file_object_associated['dmm_unit_size']
 
                 if file_object_associated['dmm_unit_interfacing'] is not None:
-                    features_dmm_unit_interfacing[a['feature_name']] = features_modified.get(a['feature_name'], 0) + file_object_associated['dmm_unit_interfacing']
-                else:
-                    features_dmm_unit_interfacing[a['feature_name']] = features_modified.get(a['feature_name'], 0)
+                    features_dmm_unit_interfacing[a['feature_name']] = file_object_associated['dmm_unit_interfacing']
 
-                    
+
         print('Features modified: ' + str(features_modified))
 
         for key, value in features_cyclomatic_complexity.items():
@@ -149,7 +141,7 @@ class Reports():
             features_average_dmm_unit_interfacing[key] = value/features_modified[key] if features_modified[key] else 0
 
 
-        # Init the Metric: 
+        # Init the Metric:
         features = Features.get_features(project_name, repository_name)
 
         features_prio = {}          # This dict mesure the priorization of the feature
@@ -159,7 +151,7 @@ class Reports():
                 features_prio[f['feature_name']] = f['number_bugs'] * 2 + f['number_files_associated'] * 1 +  features_modified[f['feature_name']] * 4 + features_average_cyclomatic_complexity[f['feature_name']] * 2 + features_average_dmm_unit_complexity[f['feature_name']] * 2 + features_average_dmm_unit_size[f['feature_name']] * 2 + features_dmm_unit_interfacing[f['feature_name']] * 2
             else:
                 features_prio[f['feature_name']] = f['number_bugs'] * 2 + f['number_files_associated'] * 1
-        
+
         print(features_prio)
         for f in features:
             if f['feature_name'] in features_modified:
@@ -185,7 +177,7 @@ class Reports():
         myresult = []
 
         for x in result:
-            myresult.append(x)            
+            myresult.append(x)
 
         return myresult
 
