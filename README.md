@@ -3,9 +3,9 @@ TestView is a framework that helps developers to select and prioritize quality a
 
 ## How to install and contribute
 
-1) Install a local MongoDB database:
+1) Install a local MongoDB database: 
 
-https://docs.mongodb.com/manual/installation/
+   https://docs.mongodb.com/manual/installation/
 
 2) Clone the repository:
 ```
