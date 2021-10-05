@@ -30,7 +30,7 @@ and cloned using::
 
     $ git clone https://github.com/mascari/testview.git
 
-Optionally (but suggested), make use of virtualenv:
+Optionally (but suggested), make use of virtualenv::
     
     $ python3 -m venv venv
     
@@ -45,7 +45,7 @@ Install the backend service requirements::
 Configure the username and password for backend mongodb service:
 Edit the file config.py and include the credentials for the mongodb service.
 
-Execute the database migration and start the backend service:
+Execute the database migration and start the backend service::
 
     $ cd testview\\backend
     
@@ -53,7 +53,7 @@ Execute the database migration and start the backend service:
     
     $ python app.py
 
-Install Flutter for web run the Frontend web UI:
+Install Flutter for web run the Frontend web UI::
 
     $ cd testview\\frontend
     
