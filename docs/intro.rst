@@ -19,7 +19,7 @@ Requirements
 .. _MongoDB: https://www.mongodb.com/
 .. _Flutter: https://flutter.dev/
 
-Backend API Source Code
+Install
 ===========
 
 TestView's git repo is available on GitHub, which can be browsed at:
@@ -33,18 +33,21 @@ and cloned using::
 Optionally (but suggested), make use of virtualenv:
     
     $ python3 -m venv venv
-    $ env\Scripts\activate
+    
+    $ .\\env\\Scripts\\activate
 
-Install the requirements::
+Install the backend service requirements::
+    
+    $ cd backend
     
     $ pip install -r requirements.txt
 
 Configure the username and password for backend mongodb service:
-Edit the file backend\config.py and include the credentials for the mongodb service.
+Edit the file config.py and include the credentials for the mongodb service.
 
 Execute the database migration and start the backend service:
 
-    $ cd backend
+    $ cd testview\\backend
     
     $ python migrate.py
     
@@ -52,9 +55,7 @@ Execute the database migration and start the backend service:
 
 Install Flutter for web run the Frontend web UI:
 
-    $ cd testview
-    
-    $ cd frontend
+    $ cd testview\\frontend
     
     $ flutter run -d chrome
 
