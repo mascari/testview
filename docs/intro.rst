@@ -19,7 +19,7 @@ Requirements
 .. _MongoDB: https://www.mongodb.com/
 .. _Flutter: https://flutter.dev/
 
-Install
+Installing TestView
 ===========
 
 TestView's git repo is available on GitHub, which can be browsed at:
