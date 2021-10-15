@@ -19,7 +19,7 @@ cd testview\backend
 
 4) Create a Virtual Environment (Python 3.6):
 ```
-python3 -m venv venv
+python -m venv venv
 source venv/bin/activate
 ```
 
