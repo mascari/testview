@@ -205,7 +205,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                             controller: _controllerDate,
                             decoration: InputDecoration(
                                 labelText: "YYYY-MM-DD:",
-                                hintText: 'Ex: 2020-08-15'),
+                                hintText: 'Ex: 2021-10-18'),
                             validator: (value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -270,7 +270,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Bugs'),
+                              label: Text('Defects'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
@@ -280,7 +280,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Files Associated'),
+                              label: Text('Associated Files'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
@@ -290,7 +290,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Files Modified'),
+                              label: Text('Modified Files'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
@@ -300,7 +300,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Average Cyclomatic Complexity'),
+                              label: Text('Cyclomatic Complexity Average'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
@@ -310,7 +310,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Average Dmm Unit Complexity'),
+                              label: Text('Unit Complexity Average'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
@@ -320,7 +320,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Average Dmm Unit Interfacing'),
+                              label: Text('Unit Interfacing Average'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
@@ -330,7 +330,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Average Dmm Unit Size'),
+                              label: Text('Unit Size Average'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
@@ -340,7 +340,7 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                               },
                             ),
                             DataColumn(
-                              label: Text('Priorization'),
+                              label: Text('Testing Importance Index'),
                               onSort: (columnIndex, ascending) {
                                 setState(() {
                                   sort = !sort;
